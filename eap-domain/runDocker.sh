@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # Script developed for starting EAP domain controller container.
 #
