@@ -1,3 +1,3 @@
 #!/bin/sh
 
-sudo docker build --rm=true --force-rm=true -t luszczynski/centos7:jon-agent .
+$SUDO docker build --rm=true --force-rm=true -t luszczynski/centos7:jon-agent .

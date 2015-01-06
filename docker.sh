@@ -27,17 +27,17 @@ function usage() {
 # $3: link:<container name1, container name2>
 # $4: Image name
 function startContainer() {
-	IP_DNS=$(sudo docker inspect --format '{{ .NetworkSettings.IPAddress }}' $DNSMASQ_CONTAINER_NAME 2> /dev/null)
+	IP_DNS=$($SUDO docker inspect --format '{{ .NetworkSettings.IPAddress }}' $DNSMASQ_CONTAINER_NAME 2> /dev/null)
 
 	if [ "x$IP_DNS" == "x" ]; then
 		echo "dnsmasq not started."
 		echo "starting now..."
 		../dnsmasq/runDocker.sh start
 		
-		IP_DNS=$(sudo docker inspect --format '{{ .NetworkSettings.IPAddress }}' $DNSMASQ_CONTAINER_NAME)		
+		IP_DNS=$($SUDO docker inspect --format '{{ .NetworkSettings.IPAddress }}' $DNSMASQ_CONTAINER_NAME)		
 	fi
 
-	CMD_START="sudo docker run --privileged $1 -d --name $2 --volumes-from $DNSMASQ_CONTAINER_NAME --dns $IP_DNS -v /etc/timezone:/etc/timezone:ro -v /tmp/share:/tmp/share";
+	CMD_START="$SUDO docker run --privileged $1 -d --name $2 --volumes-from $DNSMASQ_CONTAINER_NAME --dns $IP_DNS -v /etc/timezone:/etc/timezone:ro -v /tmp/share:/tmp/share";
 
 	if [ "x$5" == "x" ]; then
 		CMD_START="$CMD_START -h $2"
@@ -47,17 +47,17 @@ function startContainer() {
 
 	CMD_START="$CMD_START $DOCKER_USER/centos7-$4 $5"
 
-	sudo $CMD_START;
+	$SUDO $CMD_START;
 	
 }
 
 function stopContainer() {
-	sudo docker stop $1
+	$SUDO docker stop $1
 	../cleanup.sh
 }
 
 function statusContainer() {
-	status=$(sudo docker ps | grep $1 2> /dev/null)
+	status=$($SUDO docker ps | grep $1 2> /dev/null)
 
 	if [ "x$status" == "x" ]; then
 		echo "Container is NOT running"
@@ -67,23 +67,23 @@ function statusContainer() {
 }
 
 function killContainer() {
-	sudo docker kill $1
+	$SUDO docker kill $1
 	../cleanup.sh
 }
 
 function logContainer() {
-	sudo docker logs -f $1
+	$SUDO docker logs -f $1
 }
 
 function attachContainer() {
-	sudo docker exec -it $1 bash
+	$SUDO docker exec -it $1 bash
 }
 
 function bashContainer() {
-	sudo docker run -ti --privileged $1 --rm --name $2 $DOCKER_USER/centos7-$3 /bin/bash
+	$SUDO docker run -ti --privileged $1 --rm --name $2 $DOCKER_USER/centos7-$3 /bin/bash
 }
 
 function buildImage() {
-	sudo docker build --rm=true --force-rm=true -t $DOCKER_USER/centos7-${1} .
+	$SUDO docker build --rm=true --force-rm=true -t $DOCKER_USER/centos7-${1} .
 	../cleanup.sh
 }

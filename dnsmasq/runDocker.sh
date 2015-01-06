@@ -15,7 +15,7 @@ fi
 
 case "$1" in
 	start)
-		sudo docker run --privileged -d --name $DNSMASQ_CONTAINER_NAME -h $DNSMASQ_CONTAINER_NAME $DOCKER_USER/centos7-$DNSMASQ_CONTAINER_NAME
+		$SUDO docker run --privileged -d --name $DNSMASQ_CONTAINER_NAME -h $DNSMASQ_CONTAINER_NAME $DOCKER_USER/centos7-$DNSMASQ_CONTAINER_NAME
 	;;
 	stop)
 		stopContainer $DNSMASQ_CONTAINER_NAME
